@@ -2,5 +2,12 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "github>conforma/.github//config/renovate/renovate.json"
+  ],
+  "customManagers": [
+    {
+      "fileMatch": [ "^\\.github/workflows/checks.yaml$" ],
+      "matchStrings": [ "image:\\s+(?<depName>ghcr\\.io/.*?):(?<currentValue>.*?)@(?<currentDigest>.*?)\\s" ],
+      "datasourceTemplate": "docker"
+    }
   ]
 }
