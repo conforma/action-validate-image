@@ -20,7 +20,7 @@ jobs:
     - name : Run EC Validate (keyless)
       uses: ./
       with:
-        image: ghcr.io/conforma/golden-container:latest@sha256:62b398a7321f9f0de878bb8e66e461292c6686e5e10b9b7c034a218bde398f89 # latest
+        image: ghcr.io/conforma/golden-container:latest@sha256:35b9b901a0c5df4c53afd39f1424800928ab88c199fa159ee81b734dff02c531 # latest
         identity: https:\/\/github\.com\/(slsa-framework\/slsa-github-generator|conforma\/golden-container)\/
         issuer: https://token.actions.githubusercontent.com
 
