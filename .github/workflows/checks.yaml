@@ -15,7 +15,7 @@ jobs:
       status: ${{ job.status }}
     steps:
     - name: Checkout code
-      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+      uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
     - name : Run EC Validate (keyless)
       uses: ./
@@ -49,7 +49,7 @@ jobs:
         GH_TOKEN: ${{ github.token }}
 
     - name: Create New Version Release
-      uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
+      uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2
       with:
         name: ${{ env.newVersion }} Release
         body: ""
