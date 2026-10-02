@@ -47,18 +47,28 @@ runs:
         for name in IMAGE KEY POLICY IDENTITY ISSUER EXTRA_PARAMS; do
           value="${!name}"
           case "$value" in
-            *'"'*|*'`'*|*'$('*|*'\\'*|*$'\n'*|*$'\r'*)
+            *'"'*|*'`'*|*'$('*|*$'\n'*|*$'\r'*)
               echo "${name} contains unsupported shell control characters" >&2
               exit 1
               ;;
           esac
+
+          if [[ "$name" != IDENTITY ]]; then
+            case "$value" in
+              *'\'*)
+                echo "${name} contains unsupported shell control characters" >&2
+                exit 1
+                ;;
+            esac
+          fi
         done
 
         read -r -a extra_args <<< "$EXTRA_PARAMS"
         for arg in "${extra_args[@]}"; do
           case "$arg" in
-            --policy|--policy=*|--image|--image=*|--public-key|--public-key=*|\
-            --certificate-identity*|--certificate-oidc-issuer*|--output*)
+            --policy|--policy=*|-p|-p=*|--image|--image=*|-i|-i=*|\
+            --public-key|--public-key=*|-k|-k=*|--certificate-identity*|\
+            --certificate-oidc-issuer*|--output*|--strict|--strict=*|-s|-s=*)
               echo "EXTRA_PARAMS cannot override validation inputs or outputs" >&2
               exit 1
               ;;
