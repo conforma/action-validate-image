@@ -32,6 +32,39 @@ runs:
   using: composite
 
   steps:
+    - name: Validate inputs
+      shell: bash
+      env:
+        IMAGE: ${{ inputs.image }}
+        KEY: ${{ inputs.key }}
+        POLICY: ${{ inputs.policy }}
+        IDENTITY: ${{ inputs.identity }}
+        ISSUER: ${{ inputs.issuer }}
+        EXTRA_PARAMS: ${{ inputs.extra-params }}
+      run: |
+        set -euo pipefail
+
+        for name in IMAGE KEY POLICY IDENTITY ISSUER EXTRA_PARAMS; do
+          value="${!name}"
+          case "$value" in
+            *'"'*|*'`'*|*'$('*|*'\\'*|*$'\n'*|*$'\r'*)
+              echo "${name} contains unsupported shell control characters" >&2
+              exit 1
+              ;;
+          esac
+        done
+
+        read -r -a extra_args <<< "$EXTRA_PARAMS"
+        for arg in "${extra_args[@]}"; do
+          case "$arg" in
+            --policy|--policy=*|--image|--image=*|--public-key|--public-key=*|\
+            --certificate-identity*|--certificate-oidc-issuer*|--output*)
+              echo "EXTRA_PARAMS cannot override validation inputs or outputs" >&2
+              exit 1
+              ;;
+          esac
+        done
+
     - name: Run EC Validate
       uses: docker://quay.io/conforma/cli:snapshot@sha256:14357c193aa18cc2e6038ae69f92a299d19d06a3ccade6d92a849ea904736239
       id: ec_validate
