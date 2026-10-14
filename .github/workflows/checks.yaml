@@ -38,7 +38,7 @@ jobs:
     permissions:
       contents: write
     needs: ci
-    if: needs.ci.outputs.status == 'success' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.repository == 'conforma/action-validate-image' && needs.ci.outputs.status == 'success' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     steps:
     - name: Get Latest Version Tag and Increment
       run: |
